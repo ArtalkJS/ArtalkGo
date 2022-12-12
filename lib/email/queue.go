@@ -6,11 +6,11 @@ import (
 )
 
 // emailCh is a channel for email queue
-var emailCh = make(chan Email)
+var emailCh chan Email = nil
 
 func InitQueue() {
 	if emailCh != nil {
-		return
+		emailCh = make(chan Email) // TODO: add size limit
 	}
 
 	go func() {
