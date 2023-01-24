@@ -12,7 +12,6 @@ COPY . ./Artalk
 
 # build
 RUN set -ex \
-    && cd ./Artalk \
     && export VERSION=$(git describe --tags --abbrev=0) \
     && export COMMIT_SHA=$(git rev-parse --short HEAD) \
     && make all
