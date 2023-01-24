@@ -1,6 +1,6 @@
 module github.com/ArtalkJS/ArtalkGo
 
-go 1.19.4
+go 1.19
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
