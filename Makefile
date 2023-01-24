@@ -1,4 +1,5 @@
-PACKAGE_NAME := github.com/ArtalkJS/ArtalkGo
+PACKAGE_NAME := github.com/ArtalkJS/Artalk
+BIN_NAME	 := ./bin/artalk
 VERSION      ?= $(shell git describe --tags --abbrev=0)
 COMMIT_HASH  := $(shell git rev-parse --short HEAD)
 DEV_VERSION  := dev-${COMMIT_HASH}
@@ -14,33 +15,41 @@ install:
 
 build: build-frontend
 	go build \
-    	-ldflags "-s -w -X github.com/ArtalkJS/ArtalkGo/internal/config.Version=${VERSION} \
-        -X github.com/ArtalkJS/ArtalkGo/internal/config.CommitHash=${COMMIT_HASH}" \
-        -o bin/artalk-go \
-    	github.com/ArtalkJS/ArtalkGo
+    	-ldflags "-s -w -X github.com/ArtalkJS/Artalk/internal/config.Version=${VERSION} \
+        -X github.com/ArtalkJS/Artalk/internal/config.CommitHash=${COMMIT_HASH}" \
+        -o $(BIN_NAME) \
+    	github.com/ArtalkJS/Artalk
 
 build-frontend:
 	./scripts/build-frontend.sh
 
 run: all
-	./bin/artalk-go server $(ARGS)
+	$(BIN_NAME) server $(ARGS)
 
-dev:
+debug-build:
 	@if [ ! -f "pkged/pkged.go" ]; then \
 		make install; \
 	fi
+	@echo "Building Artalk ${VERSION} for debugging..."
 	@go build \
-    	-ldflags "-s -w -X github.com/ArtalkJS/ArtalkGo/internal/config.Version=${VERSION} \
-        -X github.com/ArtalkJS/ArtalkGo/internal/config.CommitHash=${COMMIT_HASH}" \
-        -o bin/artalk-go \
-    	github.com/ArtalkJS/ArtalkGo
-	./bin/artalk-go server $(ARGS)
+		-ldflags " \
+			-X github.com/ArtalkJS/Artalk/internal/config.Version=${VERSION} \
+			-X github.com/ArtalkJS/Artalk/internal/config.CommitHash=${COMMIT_HASH}" \
+		-gcflags "all=-N -l" \
+		-o $(BIN_NAME) \
+		github.com/ArtalkJS/Artalk
+
+dev: debug-build
+	$(BIN_NAME) server $(ARGS)
 
 test:
 	$(GOTEST) -timeout 20m ./internal/...
 
 test-coverage:
 	$(GOTEST) -cover ./...
+
+update-i18n:
+	go generate ./internal/i18n
 
 docker-build:
 	./scripts/docker-build.sh
@@ -82,7 +91,7 @@ release:
 		ghcr.io/goreleaser/goreleaser-cross:v${GO_VERSION} \
 		release --rm-dist --skip-validate
 
-.PHONY: all install build build-frontend \
+.PHONY: all install build debug-build build-frontend \
 	run dev test test-coverage \
 	docker-build docker-push \
 	release-dry-run release;
