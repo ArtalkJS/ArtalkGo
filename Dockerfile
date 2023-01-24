@@ -26,17 +26,16 @@ ARG TZ="Asia/Shanghai"
 
 ENV TZ ${TZ}
 
-COPY --from=builder /source/ArtalkGo/bin/artalk-go /artalk-go
+COPY --from=builder /source/Artalk/bin/artalk /artalk
 
-RUN apk upgrade \
-    && apk add bash tzdata \
+RUN apk add --no-cache bash tzdata \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone
 
-# add alias
-RUN echo -e '#!/bin/bash\n/artalk-go -w / -c /data/artalk-go.yml "$@"' > /usr/bin/artalk-go \
-    && chmod +x /usr/bin/artalk-go \
-    && cp -p /usr/bin/artalk-go /usr/bin/artalk
+# move runner script to `/usr/bin/` and create alias
+COPY scripts/docker-artalk-runner.sh /usr/bin/artalk
+RUN chmod +x /usr/bin/artalk \
+    && ln -s /usr/bin/artalk /usr/bin/artalk-go
 
 VOLUME ["/data"]
 
@@ -45,7 +44,7 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-# expose ArtalkGo default port
+# expose Artalk default port
 EXPOSE 23366
 
 CMD ["server", "--host", "0.0.0.0", "--port", "23366"]
