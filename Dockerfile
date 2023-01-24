@@ -33,7 +33,7 @@ RUN apk add --no-cache bash tzdata \
     && echo ${TZ} > /etc/timezone
 
 # move runner script to `/usr/bin/` and create alias
-COPY scripts/docker-artalk-runner.sh /usr/bin/artalk
+COPY scripts/docker-build.sh /usr/bin/artalk
 RUN chmod +x /usr/bin/artalk \
     && ln -s /usr/bin/artalk /usr/bin/artalk-go
 
