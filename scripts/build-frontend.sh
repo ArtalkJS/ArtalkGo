@@ -20,7 +20,7 @@ mkdir -p ./local/
 cd ./local/
 rm -rf ./Artalk
 
-git clone https://github.com/ArtalkJS/Artalk.git Artalk
+git clone --depth 1 --branch v2.4.4 https://github.com/ArtalkJS/Artalk.git Artalk
 cd Artalk
 
 # # using latest tag soruce code
