@@ -34,6 +34,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.385
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tms v1.0.385
 	github.com/tidwall/gjson v1.11.0
+	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 	github.com/yuin/goldmark v1.4.0
 	golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838
@@ -118,7 +119,6 @@ require (
 	github.com/utahta/go-linenotify v0.5.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
-	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect

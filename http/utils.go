@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"
 	"github.com/sirupsen/logrus"
+	"github.com/vmihailenco/msgpack"
 )
 
 type Map = map[string]interface{}
@@ -100,4 +101,16 @@ func CheckIsAllowed(c echo.Context, name string, email string, page model.Page, 
 	}
 
 	return true, nil
+}
+
+func CopyStruct(src *map[string]interface{}, dest *map[string]interface{}) error {
+	b, err := msgpack.Marshal(src)
+	if err != nil {
+		return err
+	}
+	err = msgpack.Unmarshal(b, dest)
+	if err != nil {
+		return err
+	}
+	return nil
 }
