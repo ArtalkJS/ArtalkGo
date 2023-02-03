@@ -29,7 +29,7 @@ func AsyncSend(notify *model.Notify) {
 
 	receiveUser := notify.FetchUser()
 
-	mailBody := RenderEmailBody(notify)
+	mailBody := RenderEmailBody(notify, receiveUser.IsAdmin)
 	mailSubject := ""
 	if !receiveUser.IsAdmin {
 		mailSubject = RenderCommon(config.Instance.Email.MailSubject, notify)
